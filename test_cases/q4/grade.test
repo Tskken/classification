@@ -1,0 +1,13 @@
+class: "GradeClassifierTest"
+classifier_module: "ann"
+classifier_class: "NeuralNetworkClassifier"
+
+max_iterations: "50"
+
+dataset_name: "big_digit_data"
+
+# our solution: 86%
+exact_output: "False"
+accuracy_scale: "25"
+accuracy_thresholds: "80"
+learning_rates: "0.2"
