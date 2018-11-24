@@ -88,7 +88,14 @@ class PerceptronClassifier(ClassificationMethod):
         (and thus represents a vector a values).
         """
         # *** YOUR CODE HERE ***
-        util.raise_not_defined()
+        counter = util.Counter()
+        for i in self.legal_labels:
+            counter[i] = datum.__mul__(self.weights[i])
+            if label == counter.arg_max():
+                pass
+            else:
+                self.weights[label].__radd__(datum)
+                self.weights[counter.arg_max()].__sub__(datum)
 
     def classify(self, data):
         """Classify each datum.
