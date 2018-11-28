@@ -90,7 +90,13 @@ class OptimizedPerceptronClassifier(ClassificationMethod):
         You must use the provided self.weights numpy array.
         """
         # *** YOUR CODE HERE ***
-        util.raise_not_defined()
+        results = np.dot(datum, self.weights)
+        winner = np.argmax(results)
+        if winner == label:
+            pass
+        else:
+            self.weights[:,winner] = self.weights[:,winner] - datum
+            self.weights[:,label] = self.weights[:,label] + datum
 
     def classify(self, data):
         """Classify each datum.
@@ -110,7 +116,14 @@ class OptimizedPerceptronClassifier(ClassificationMethod):
                             "before data can be classified")
 
         # *** YOUR CODE HERE ***
-        util.raise_not_defined()
+        guesses = []
+        data_matrix = np.asarray([np.asarray(list(datum.values()))
+                                  for datum in data])
+        for datum in data_matrix:
+            results = np.dot(datum, self.weights)
+            winner = np.argmax(results)
+            guesses.append(winner)
+        return guesses
 
     def find_high_weight_features(self, label, num=100):
         """Return a list of num features with the greatest weight for label.
