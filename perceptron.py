@@ -88,14 +88,12 @@ class PerceptronClassifier(ClassificationMethod):
         (and thus represents a vector a values).
         """
         # *** YOUR CODE HERE ***
-        counter = util.Counter()
-        for i in self.legal_labels:
-            counter[i] = datum.__mul__(self.weights[i])
-            if label == counter.arg_max():
-                pass
-            else:
-                self.weights[label].__radd__(datum)
-                self.weights[counter.arg_max()].__sub__(datum)
+        # Calls classify to get prediction, then updates the weights if the actual and prediction don't match
+        counter = [1]
+        counter[0] = self.classify([datum])[0]
+        if label != counter[0]:
+            self.weights[label] += datum
+            self.weights[counter[0]] -= datum
 
     def classify(self, data):
         """Classify each datum.
