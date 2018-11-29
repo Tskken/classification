@@ -66,4 +66,8 @@ class PerceptronClassifierPacman(PerceptronClassifier):
             for (datum, legal_moves), label in zip(training_data,
                                                    training_labels):
                 # *** YOUR CODE HERE ***
-                util.raise_not_defined()
+                # Gets the guess action, then updates the weights
+                guess = self.classify([(datum, legal_moves)])[0]
+                if guess != label:
+                    self.weights += datum[label]
+                    self.weights -= datum[guess]
