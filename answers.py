@@ -21,4 +21,4 @@ Pieter Abbeel (pabbeel@cs.berkeley.edu).
 def q3():
     """Answer question 3."""
     # *** YOUR CODE HERE ***
-    return None
+    return "a"

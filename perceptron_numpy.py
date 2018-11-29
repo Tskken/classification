@@ -147,4 +147,9 @@ class OptimizedPerceptronClassifier(ClassificationMethod):
         key
         """
         # *** YOUR CODE HERE ***
-        util.raise_not_defined()
+        weight_list = enumerate(self.weights[:,label].tolist())
+        end_list = sorted(weight_list, key=lambda x: x[1])
+        feat_list = []
+        for i in end_list[-num:]:
+            feat_list.append(self.features[i[0]])
+        return feat_list
