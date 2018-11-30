@@ -131,8 +131,21 @@ def enhanced_pacman_features(state, action):
     It should return a counter with { <feature name> : <feature value>, ... }
     """
     features = util.Counter()
-    "*** YOUR CODE HERE ***"
-    util.raise_not_defined()
+    # Returns closest food and closest ghost using successor function
+
+    features = util.Counter()
+    successor = state.generate_successor(0, action)
+    pacman_position = successor.get_pacman_position()
+    test_variable = [util.manhattan_distance(pacman_position, fpos) for fpos in successor.get_food().as_list()]
+    if len(test_variable) == 0:
+        closest_food = 0
+    else:
+        closest_food = min(test_variable)
+
+    closest_ghost = min([util.manhattan_distance(pacman_position, gpos) for gpos in successor.get_ghost_positions()])
+
+    features["ClosestFood"] = closest_food
+    features["ClosestGhost"] = closest_ghost
     return features
 
 
