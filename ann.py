@@ -91,30 +91,46 @@ class NeuralNetworkClassifier(ClassificationMethod):
         using all training_data for each batch, and should use
         keras.optimizers.SGD as in my linear regression demo.
         """
-        self.features = list(training_data[0].keys())  # could be useful later
-        learning_rate = self.learning_rates[0]
+        self.features = list(training_data[0].keys()) # could be useful later
+        test_data = np.asarray([np.asarray(list(datum.values()))
+                                for datum in validation_data])
+        test_label = keras.utils.to_categorical(validation_labels,
+                                                num_classes=10)
 
         # *** YOUR CODE HERE ***
-        data_matrix = np.asarray([np.asarray(list(datum.values()))
-                                  for datum in training_data])
 
-        self.model = keras.Sequential([
-            keras.layers.Flatten(input_shape=(data_matrix.shape[1],)),
-            keras.layers.Dense(128, activation=tf.nn.relu),
-            keras.layers.Dense(10, activation=tf.nn.softmax)
-        ])
+        for learning_rate in self.learning_rates:
+            data_matrix = np.asarray([np.asarray(list(datum.values()))
+                                      for datum in training_data])
 
-        self.model.compile(optimizer=keras.optimizers.SGD(
-            learning_rate * data_matrix.shape[1]),
-            loss='mse')
+            model = keras.Sequential([
+                keras.layers.Flatten(input_shape=(data_matrix.shape[1],)),
+                keras.layers.Dense(128, activation=tf.nn.relu),
+                keras.layers.Dense(10, activation=tf.nn.softmax)
+            ])
 
-        self.model.summary()
+            model.compile(optimizer=keras.optimizers.SGD(
+                learning_rate * data_matrix.shape[1]),
+                loss='mse',
+                metrics=['accuracy'])
 
-        labels = keras.utils.to_categorical(training_labels, num_classes=10)
+            model.summary()
 
-        self.model.fit(data_matrix, labels,
-                       batch_size=data_matrix.shape[1],
-                       epochs=self.max_iterations)
+            labels = keras.utils.to_categorical(training_labels,
+                                                num_classes=10)
+
+            model.fit(data_matrix, labels,
+                      batch_size=data_matrix.shape[1],
+                      epochs=self.max_iterations)
+
+            if self.model is None:
+                self.model = model
+                return
+
+            new_loss, new_acc = model.evaluate(test_data, test_label)
+            curr_loss, curr_acc = self.model.evaluate(test_data, test_label)
+            if new_loss < curr_loss and new_acc > curr_acc:
+                self.model = model
 
     def classify(self, data):
         """Classifies each datum as the label with largest softmax output."""
