@@ -91,7 +91,6 @@ class NeuralNetworkClassifier(ClassificationMethod):
         using all training_data for each batch, and should use
         keras.optimizers.SGD as in my linear regression demo.
         """
-        self.features = list(training_data[0].keys())  # could be useful later
         test_data = np.asarray([np.asarray(list(datum.values()))
                                 for datum in validation_data])
 
