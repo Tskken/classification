@@ -94,8 +94,6 @@ class NeuralNetworkClassifier(ClassificationMethod):
         self.features = list(training_data[0].keys()) # could be useful later
         test_data = np.asarray([np.asarray(list(datum.values()))
                                 for datum in validation_data])
-        test_label = keras.utils.to_categorical(validation_labels,
-                                                num_classes=10)
 
         # *** YOUR CODE HERE ***
 
@@ -110,34 +108,31 @@ class NeuralNetworkClassifier(ClassificationMethod):
             ])
 
             model.compile(optimizer=keras.optimizers.SGD(
-                learning_rate * data_matrix.shape[1]),
-                loss='mse',
+                learning_rate),
+                loss='sparse_categorical_crossentropy',
                 metrics=['accuracy'])
 
             model.summary()
 
-            labels = keras.utils.to_categorical(training_labels,
-                                                num_classes=10)
-
-            model.fit(data_matrix, labels,
+            model.fit(data_matrix, training_labels,
                       batch_size=data_matrix.shape[1],
                       epochs=self.max_iterations)
 
             if self.model is None:
                 self.model = model
-                return
-
-            new_loss, new_acc = model.evaluate(test_data, test_label)
-            curr_loss, curr_acc = self.model.evaluate(test_data, test_label)
-            if new_loss < curr_loss and new_acc > curr_acc:
-                self.model = model
+            else:
+                new_loss, new_acc = model.evaluate(test_data, validation_labels)
+                curr_loss, curr_acc = self.model.evaluate(test_data, validation_labels)
+                if new_loss < curr_loss and new_acc > curr_acc:
+                    self.model = model
 
     def classify(self, data):
         """Classifies each datum as the label with largest softmax output."""
         # *** YOUR CODE HERE ***
         data_matrix = np.asarray([np.asarray(list(datum.values()))
                                   for datum in data])
-        return self.model.predict(data_matrix).flatten()
+
+        return [np.argmax(pred) for pred in self.model.predict(data_matrix)]
 
     def find_high_weight_features(self, label, num=100):
         """Return a list of num features with the greatest weight for label."""
