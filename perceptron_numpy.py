@@ -1,5 +1,20 @@
 """Optimized perceptron implementation using numpy.
 
+Author: Dylan Blanchard, Sloan Anderson, and Stephen Johnson
+Class: CSI-480-01
+Assignment: PA 5 -- Supervised Learning
+Due Date: Nov 30, 2018 11:59 PM
+
+Certification of Authenticity:
+I certify that this is entirely my own work, except where I have given
+fully-documented references to the work of others. I understand the definition
+and consequences of plagiarism and acknowledge that the assessor of this
+assignment may, for the purpose of assessing this assignment:
+- Reproduce this assignment and provide a copy to another member of academic
+- staff; and/or Communicate a copy of this assignment to a plagiarism checking
+- service (which may then retain a copy of this assignment on its database for
+- the purpose of future plagiarism checking)
+
 Champlain College CSI-480, Fall 2018
 The following code was adapted by Joshua Auerbach (jauerbach@champlain.edu)
 from the UC Berkeley Pacman Projects (see license and attribution below).
@@ -19,7 +34,7 @@ Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
 import numpy as np
-import util
+
 from classification_method import ClassificationMethod
 PRINT = True
 
@@ -95,8 +110,8 @@ class OptimizedPerceptronClassifier(ClassificationMethod):
         if winner == label:
             pass
         else:
-            self.weights[:,winner] = self.weights[:,winner] - datum
-            self.weights[:,label] = self.weights[:,label] + datum
+            self.weights[:, winner] = self.weights[:, winner] - datum
+            self.weights[:, label] = self.weights[:, label] + datum
 
     def classify(self, data):
         """Classify each datum.
@@ -147,7 +162,7 @@ class OptimizedPerceptronClassifier(ClassificationMethod):
         key
         """
         # *** YOUR CODE HERE ***
-        weight_list = enumerate(self.weights[:,label].tolist())
+        weight_list = enumerate(self.weights[:, label].tolist())
         end_list = sorted(weight_list, key=lambda x: x[1])
         feat_list = []
         for i in end_list[-num:]:

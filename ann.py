@@ -1,6 +1,6 @@
 """Neural network classifier with softmax output.
 
-Author: Test Student
+Author: Dylan Blanchard, Sloan Anderson, and Stephen Johnson
 Class: CSI-480-01
 Assignment: PA 5 -- Supervised Learning
 Due Date: Nov 30, 2018 11:59 PM
@@ -91,7 +91,7 @@ class NeuralNetworkClassifier(ClassificationMethod):
         using all training_data for each batch, and should use
         keras.optimizers.SGD as in my linear regression demo.
         """
-        self.features = list(training_data[0].keys()) # could be useful later
+        self.features = list(training_data[0].keys())  # could be useful later
         test_data = np.asarray([np.asarray(list(datum.values()))
                                 for datum in validation_data])
 
@@ -121,8 +121,10 @@ class NeuralNetworkClassifier(ClassificationMethod):
             if self.model is None:
                 self.model = model
             else:
-                new_loss, new_acc = model.evaluate(test_data, validation_labels)
-                curr_loss, curr_acc = self.model.evaluate(test_data, validation_labels)
+                new_loss, new_acc = model.evaluate(test_data,
+                                                   validation_labels)
+                curr_loss, curr_acc = self.model.evaluate(test_data,
+                                                          validation_labels)
                 if new_loss < curr_loss and new_acc > curr_acc:
                     self.model = model
 
