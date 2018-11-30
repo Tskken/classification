@@ -95,11 +95,33 @@ class NeuralNetworkClassifier(ClassificationMethod):
         learning_rate = self.learning_rates[0]
 
         # *** YOUR CODE HERE ***
+        data_matrix = np.asarray([np.asarray(list(datum.values()))
+                                  for datum in training_data])
+
+        self.model = keras.Sequential([
+            keras.layers.Flatten(input_shape=(data_matrix.shape[1],)),
+            keras.layers.Dense(128, activation=tf.nn.relu),
+            keras.layers.Dense(10, activation=tf.nn.softmax)
+        ])
+
+        self.model.compile(optimizer=keras.optimizers.SGD(
+            learning_rate * data_matrix.shape[1]),
+            loss='mse')
+
+        self.model.summary()
+
+        labels = keras.utils.to_categorical(training_labels, num_classes=10)
+
+        self.model.fit(data_matrix, labels,
+                       batch_size=data_matrix.shape[1],
+                       epochs=self.max_iterations)
 
     def classify(self, data):
         """Classifies each datum as the label with largest softmax output."""
         # *** YOUR CODE HERE ***
-        util.raise_not_defined()
+        data_matrix = np.asarray([np.asarray(list(datum.values()))
+                                  for datum in data])
+        return self.model.predict(data_matrix).flatten()
 
     def find_high_weight_features(self, label, num=100):
         """Return a list of num features with the greatest weight for label."""
